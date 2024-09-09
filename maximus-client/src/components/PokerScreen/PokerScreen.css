@@ -1,0 +1,18 @@
+.poker-screen {
+    min-height: 100vh;
+    background-image: url("../images/poker-screen-bg.jpg");
+    background-position: center;
+    background-size: cover;
+}
+
+.maximus-logo {
+}
+
+h1 {
+    font-size: 10rem;
+    font-weight: bold;
+    color: #000000; /* Цвет текста */
+    -webkit-text-stroke: 1px #FFFFFF; /* Толщина и цвет обводки */
+}
+
+

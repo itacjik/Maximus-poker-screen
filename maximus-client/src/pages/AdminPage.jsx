@@ -6,9 +6,7 @@ import "../styles/AdminPage.css";
 const AdminPage = () => {
   const [tables, setTables] = useState([]);
   const [styles, setStyles] = useState({
-    fontFamilyHeader: "Arial",
-    fontFamilyColumn: "Arial",
-    fontFamilyContent: "Arial",
+    fontFamily: "Arial",
     headerFontSize: 24,
     columnFontSize: 18,
     contentFontSize: 16,
@@ -118,9 +116,9 @@ const AdminPage = () => {
           <label>
             Шрифт заголовков таблиц:
             <select
-              value={styles.fontFamilyHeader}
+              value={styles.fontFamily}
               onChange={(e) =>
-                setStyles({ ...styles, fontFamilyHeader: e.target.value })
+                setStyles({ ...styles, fontFamily: e.target.value })
               }
             >
               <option value="Arial" selected>

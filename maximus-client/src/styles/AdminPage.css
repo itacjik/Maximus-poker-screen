@@ -38,3 +38,7 @@ table {
 th, td {
  padding: 8px 24px;
 }
+
+th .header {
+    padding: 0;
+}

@@ -1,0 +1,28 @@
+{
+  "styles": {
+    "headerFontSize": "44",
+    "headerColor": "#000000",
+    "tableColor": "#ffffff",
+    "textFontSize": "23",
+    "textColor": "#000000",
+    "bgColor": "#ffffff"
+  },
+  "tables": [
+    {
+      "headers": [
+        "Limits",
+        "Cap"
+      ],
+      "rows": [
+        {
+          "limits": "1$/2$",
+          "cap": "-"
+        },
+        {
+          "limits": "1",
+          "cap": "4"
+        }
+      ]
+    }
+  ]
+}

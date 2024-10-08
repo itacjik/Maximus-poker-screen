@@ -1,0 +1,40 @@
+.poker-screen {
+    min-height: 100vh;
+    background-image: url("../images/poker-screen-bg.jpg");
+    background-position: center;
+    background-size: cover;
+}
+
+.editButton {
+    position: fixed;
+    left: 10px;
+    bottom: 10px;
+    padding: 10px;
+    background-color: #333;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+
+.popup {
+    position: fixed;
+    left: 15rem;
+    bottom: 10px;
+    transform: translate(-50%, -50%);
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    width: 400px;
+    border-radius: 8px;
+}
+
+table {
+    display: block;
+}
+
+th, td {
+ padding: 8px 24px;
+}

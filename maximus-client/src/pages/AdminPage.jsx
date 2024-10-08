@@ -7,18 +7,16 @@ const AdminPage = () => {
   const [tables, setTables] = useState([]);
   const [styles, setStyles] = useState({
     fontFamily: "Arial",
+    titleFontSize: 36,
     headerFontSize: 24,
-    columnFontSize: 18,
     contentFontSize: 16,
     fontColorHeader: "#000000",
     fontColorColumn: "#000000",
     fontColorContent: "#000000",
-    borderColorHeader: "#000000",
-    borderColorColumn: "#000000",
-    borderColorContent: "#000000",
   });
   const [isEditing, setIsEditing] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
+  const [isBold, setIsBold] = useState();
 
   // Добавить новую таблицу
   const addNewTable = () => {
@@ -28,7 +26,7 @@ const AdminPage = () => {
         title: `Table ${tables.length + 1}`, // Название новой таблицы
         headers: ["Limits", "Rake", "Cap", "Min Buy In"], // Изначальные заголовки
         rows: [{ limits: "1$/2$", rake: "5%", cap: "-", minBuyIn: "100$" }], // Изначальные строки
-        position: { x: 50, y: 50 },
+        position: { x: 150, y: 150 },
         size: { width: 400, height: 200 },
       },
     ]);
@@ -112,9 +110,17 @@ const AdminPage = () => {
             />
           </label>
           <h2>Редактирование стиля</h2>
-
+          {/* Выбор шрифтов */}
           <label>
-            Шрифт заголовков таблиц:
+            Жирные текста
+            <input
+              type="checkbox"
+              checked={isBold}
+              onChange={(e) => setIsBold(e.target.checked)}
+            />
+          </label>
+          <label>
+            Шрифт таблиц:
             <select
               value={styles.fontFamily}
               onChange={(e) =>
@@ -134,6 +140,8 @@ const AdminPage = () => {
               <option value="Lucida Console">Lucida Console</option>
             </select>
           </label>
+          
+          {/* Заголовок таблиц */}
           <label>
             Цвет заголовков таблиц:
             <input
@@ -145,21 +153,55 @@ const AdminPage = () => {
             />
           </label>
           <label>
-            Окантовка заголовков таблиц:
+            Тень заголовков таблиц:
             <input
               type="color"
-              value={styles.borderColorHeader}
+              id="shadowColorTitle"
+              value={styles.shadowColorTitle}
               onChange={(e) =>
-                setStyles({ ...styles, borderColorHeader: e.target.value })
+                setStyles({ ...styles, shadowColorTitle: e.target.value })
               }
             />
           </label>
+          <label>
+            Размер шрифта заголовков таблиц:
+            <input
+              type="range"
+              min="10"
+              max="72"
+              value={styles.titleFontSize}
+              onChange={(e) =>
+                setStyles({ ...styles, titleFontSize: e.target.value })
+              }
+            />
+            <span id="titleFontSizeValue">{styles.titleFontSize}px</span>
+          </label>
 
+          {/* Заголовок столбцов */}
+          <label>
+            Цвет заголовков столбцов:
+            <input
+              type="color"
+              value={styles.fontColorColumn}
+              onChange={(e) =>
+                setStyles({ ...styles, fontColorColumn: e.target.value })
+              }
+            />
+          </label>
+          <label>
+            Тень заголовков столбцов:
+            <input
+              type="color"
+              value={styles.shadowColorHeader}
+              onChange={(e) =>
+                setStyles({ ...styles, shadowColorHeader: e.target.value })
+              }
+            />
+          </label>
           <label>
             Размер шрифта заголовков:
             <input
               type="range"
-              id="headerFontSizeSlider"
               min="10"
               max="72"
               value={styles.headerFontSize}
@@ -168,6 +210,19 @@ const AdminPage = () => {
               }
             />
             <span id="headerFontSizeValue">{styles.headerFontSize}px</span>
+          </label>
+
+          
+          {/* Содержимое таблиц */}
+          <label>
+            Цвет содержимого:
+            <input
+              type="color"
+              value={styles.fontColorContent}
+              onChange={(e) =>
+                setStyles({ ...styles, fontColorContent: e.target.value })
+              }
+            />
           </label>
           <label>
             Размер шрифта содержимого:
@@ -183,28 +238,9 @@ const AdminPage = () => {
             />
             <span id="contentFontSizeValue">{styles.contentFontSize}px</span>
           </label>
-          <label>
-            Цвет текста:
-            <input
-              type="color"
-              id="fontColor"
-              value={styles.fontColor}
-              onChange={(e) =>
-                setStyles({ ...styles, fontColor: e.target.value })
-              }
-            />
-          </label>
-          <label>
-            Цвет заголовка:
-            <input
-              type="color"
-              id="headerColor"
-              value={styles.headerColor}
-              onChange={(e) =>
-                setStyles({ ...styles, headerColor: e.target.value })
-              }
-            />
-          </label>
+
+          
+
           <label>
             Цвет фона:
             <input
@@ -216,28 +252,7 @@ const AdminPage = () => {
               }
             />
           </label>
-          <label>
-            Тень текста:
-            <input
-              type="color"
-              id="shadowColor"
-              value={styles.shadowColor}
-              onChange={(e) =>
-                setStyles({ ...styles, shadowColor: e.target.value })
-              }
-            />
-          </label>
-          <label>
-            Тень заголовков:
-            <input
-              type="color"
-              id="shadowColorHeader"
-              value={styles.shadowColorHeader}
-              onChange={(e) =>
-                setStyles({ ...styles, shadowColorHeader: e.target.value })
-              }
-            />
-          </label>
+          
 
           {/* <div className="popup-buttons">
             <button onClick={applyStyles}>Применить</button>
@@ -269,33 +284,33 @@ const AdminPage = () => {
             border: "1px solid #000",
             backgroundColor: `${styles.bgColor}99`, // Полупрозрачный фон
             borderRadius: "20px",
-          }}q
+            textAlign: "center",
+          }}
+          q
         >
           <div>
             <h1
-              className="header"
+            className="mt-3"
               style={{
                 fontFamily: styles.fontFamily,
-                color: styles.headerColor,
-                fontSize: `${styles.headerFontSize}px`,
+                color: styles.fontColorHeader,
+                fontSize: `${styles.titleFontSize}px`,
                 fontWeight: styles.isBold ? "bold" : "normal",
-                textShadow: `2px 2px 4px ${styles.shadowColorHeader}`,
-                textAlign: "center",
+                textShadow: `2px 2px 4px ${styles.shadowColorTitle}`,
               }}
             >
               {table.title}
             </h1>
-            <table className="mx-3">
+            <table className="mx-2">
               <thead>
                 <tr>
                   {table.headers.map((header, columnIndex) => (
                     <th
                       key={columnIndex}
-                      className="header"
                       scope="col"
                       style={{
                         fontFamily: styles.fontFamily,
-                        color: styles.headerColor,
+                        color: styles.fontColorColumn,
                         fontSize: `${styles.headerFontSize}px`,
                         fontWeight: styles.isBold ? "bold" : "normal",
                         textShadow: `2px 2px 4px ${styles.shadowColorHeader}`,
@@ -340,13 +355,11 @@ const AdminPage = () => {
                     {Object.keys(row).map((columnKey, columnIndex) => (
                       <td
                         key={columnIndex}
-                        className="editable"
                         style={{
                           fontFamily: styles.fontFamily,
                           fontSize: `${styles.contentFontSize}px`,
-                          color: styles.fontColor,
+                          color: styles.fontColorContent,
                           fontWeight: styles.isBold ? "bold" : "normal",
-                          textShadow: `1px 1px 2px ${styles.shadowColor}`,
                         }}
                       >
                         {isEditing ? (

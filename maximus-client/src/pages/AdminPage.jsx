@@ -13,10 +13,12 @@ const AdminPage = () => {
     fontColorHeader: "#000000",
     fontColorColumn: "#000000",
     fontColorContent: "#000000",
+    isBold: false,
   });
   const [isEditing, setIsEditing] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
-  const [isBold, setIsBold] = useState();
+  const [previousTables, setPreviousTables] = useState([]);
+  const [previousStyles, setPreviousStyles] = useState({});
 
   // Добавить новую таблицу
   const addNewTable = () => {
@@ -30,6 +32,12 @@ const AdminPage = () => {
         size: { width: 400, height: 200 },
       },
     ]);
+  };
+
+  // Удаление таблицы
+  const removeTable = (tableIndex) => {
+    const updatedTables = tables.filter((_, index) => index !== tableIndex);
+    setTables(updatedTables);
   };
 
   // Обновить название таблицы
@@ -92,10 +100,43 @@ const AdminPage = () => {
     setTables(updatedTables);
   };
 
+  // Сохранить данные на сервере
+  const saveData = async () => {
+    const dataToSave = { tables, styles };
+    try {
+      const response = await fetch("/save-data", {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify(dataToSave),
+      });
+      if (response.ok) {
+        alert("Изменения успешно сохранены");
+      } else {
+        alert("Ошибка при сохранении изменений");
+      }
+    } catch (error) {
+      console.error("Ошибка при отправке данных на сервер:", error);
+    }
+  };
+
+  const cancelChanges = () => {
+    setTables(previousTables);
+    setStyles(previousStyles);
+    setShowPopup(false);
+  };
+
+  const toggleEditMode = () => {
+    setPreviousTables([...tables]); // Сохраняем текущее состояние перед редактированием
+    setPreviousStyles({ ...styles });
+    setShowPopup(!showPopup); // Скрываем или показываем модальное окно
+  };
+
   return (
     <div className="poker-screen">
-      <button className="editButton" onClick={() => setShowPopup(true)}>
-        Режим редактирования
+       <button className="editButton" onClick={toggleEditMode}>
+        {showPopup ? "Закрыть редактирование" : "Режим редактирования"}
       </button>
 
       {showPopup && (
@@ -112,11 +153,13 @@ const AdminPage = () => {
           <h2>Редактирование стиля</h2>
           {/* Выбор шрифтов */}
           <label>
-            Жирные текста
+            Жирный текст
             <input
               type="checkbox"
-              checked={isBold}
-              onChange={(e) => setIsBold(e.target.checked)}
+              checked={styles.isBold}
+              onChange={(e) =>
+                setStyles({ ...styles, isBold: e.target.checked })
+              }
             />
           </label>
           <label>
@@ -140,7 +183,7 @@ const AdminPage = () => {
               <option value="Lucida Console">Lucida Console</option>
             </select>
           </label>
-          
+
           {/* Заголовок таблиц */}
           <label>
             Цвет заголовков таблиц:
@@ -212,7 +255,6 @@ const AdminPage = () => {
             <span id="headerFontSizeValue">{styles.headerFontSize}px</span>
           </label>
 
-          
           {/* Содержимое таблиц */}
           <label>
             Цвет содержимого:
@@ -239,8 +281,6 @@ const AdminPage = () => {
             <span id="contentFontSizeValue">{styles.contentFontSize}px</span>
           </label>
 
-          
-
           <label>
             Цвет фона:
             <input
@@ -252,12 +292,9 @@ const AdminPage = () => {
               }
             />
           </label>
-          
 
-          {/* <div className="popup-buttons">
-            <button onClick={applyStyles}>Применить</button>
-            <button onClick={() => setShowPopup(false)}>Закрыть</button>
-          </div> */}
+          <button onClick={saveData}>Сохранить</button>
+          <button onClick={cancelChanges}>Отменить</button>
         </div>
       )}
 
@@ -286,11 +323,10 @@ const AdminPage = () => {
             borderRadius: "20px",
             textAlign: "center",
           }}
-          q
         >
           <div>
             <h1
-            className="mt-3"
+              className="mt-3"
               style={{
                 fontFamily: styles.fontFamily,
                 color: styles.fontColorHeader,
@@ -301,6 +337,13 @@ const AdminPage = () => {
             >
               {table.title}
             </h1>
+
+            {isEditing ? (
+              <button onClick={() => removeTable(tableIndex)}>
+                Удалить таблицу
+              </button>
+            ) : null}
+
             <table className="mx-2">
               <thead>
                 <tr>

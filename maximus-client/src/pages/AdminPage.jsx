@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Rnd } from "react-rnd";
 
-import "../styles/AdminPage.css";
+import "../styles/styles.css";
 
 const AdminPage = () => {
   const [tables, setTables] = useState([]);
@@ -134,7 +134,7 @@ const AdminPage = () => {
   };
 
   return (
-    <div className="poker-screen">
+    <div className="main-screen">
       <button className="editButton" onClick={toggleEditMode}>
         {showPopup ? "Закрыть редактирование" : "Режим редактирования"}
       </button>

@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Rnd } from "react-rnd"; // Для управления позициями элементов
+import { Rnd } from "react-rnd";
 import "../styles/styles.css";
 
-// Функция загрузки данных с сервера
 const loadDataFromServer = async () => {
   const response = await fetch("/get-data");
   const data = await response.json();
@@ -10,16 +9,15 @@ const loadDataFromServer = async () => {
 };
 
 const PokerPage = () => {
-  const [tables, setTables] = useState([]); // Данные таблиц
-  const [styles, setStyles] = useState({}); // Данные стилей
+  const [tables, setTables] = useState([]); 
+  const [styles, setStyles] = useState({}); 
 
-  // Загружаем сохраненные данные при загрузке страницы
   useEffect(() => {
     const loadData = async () => {
       const savedData = await loadDataFromServer();
       if (savedData) {
-        setTables(savedData.tables); // Устанавливаем таблицы
-        setStyles(savedData.styles); // Устанавливаем стили
+        setTables(savedData.tables);
+        setStyles(savedData.styles);
       }
     };
     loadData();
@@ -29,12 +27,11 @@ const PokerPage = () => {
     <div
       className="main-screen"
       style={{
-        backgroundImage: `url(${styles.backgroundImage})`, // Фоновое изображение
-        backgroundSize: "cover", // Покрывает весь экран
+        backgroundImage: `url(${styles.backgroundImage})`,
+        backgroundSize: "cover",
         position: "relative",
       }}
     >
-      {/* Слой затемнения */}
       <div
         style={{
           position: "absolute",
@@ -43,17 +40,17 @@ const PokerPage = () => {
           width: "100%",
           height: "100%",
           backgroundColor: "rgba(0, 0, 0, 0.5)",
-          opacity: styles.overlayOpacity || 0.5, // Уровень затемнения
-          zIndex: 0, // Слой поверх фона, но под контентом
+          opacity: styles.overlayOpacity || 0.5,
+          zIndex: 0,
         }}
       ></div>
       {tables.map((table, tableIndex) => (
         <Rnd
           key={tableIndex}
-          size={{ width: table.size.width, height: table.size.height }} // Задание размера таблицы
-          position={{ x: table.position.x, y: table.position.y }} // Задание позиции таблицы
-          disableDragging={true} // Отключаем возможность перемещения
-          enableResizing={false} // Отключаем изменение размера
+          size={{ width: table.size.width, height: table.size.height }}
+          position={{ x: table.position.x, y: table.position.y }}
+          disableDragging={true}
+          enableResizing={false} 
           bounds="parent"
           style={{
             border: "1px solid #000",
@@ -63,7 +60,6 @@ const PokerPage = () => {
           }}
         >
           <div>
-            {/* Заголовок таблицы */}
             <h1
               className="mt-3"
               style={{
@@ -77,7 +73,6 @@ const PokerPage = () => {
               {table.title}
             </h1>
 
-            {/* Таблица */}
             <table className="mx-2">
               <thead>
                 <tr>

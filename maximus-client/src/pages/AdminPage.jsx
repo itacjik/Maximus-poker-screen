@@ -39,51 +39,45 @@ const AdminPage = () => {
     loadData();
   }, []);
 
-  // Добавить новую таблицу
   const addNewTable = () => {
     setTables([
       ...tables,
       {
-        title: `Table ${tables.length + 1}`, // Название новой таблицы
-        headers: ["Limits", "Rake", "Cap", "Min Buy In"], // Изначальные заголовки
-        rows: [{ limits: "1$/2$", rake: "5%", cap: "-", minBuyIn: "100$" }], // Изначальные строки
+        title: `Table ${tables.length + 1}`, 
+        headers: ["Limits", "Rake", "Cap", "Min Buy In"], 
+        rows: [{ limits: "1$/2$", rake: "5%", cap: "-", minBuyIn: "100$" }],// Изначальные строки
         position: { x: 150, y: 150 },
         size: { width: 400, height: 200 },
       },
     ]);
   };
 
-  // Удаление таблицы
   const removeTable = (tableIndex) => {
     const updatedTables = tables.filter((_, index) => index !== tableIndex);
     setTables(updatedTables);
   };
 
-  // Обновить название таблицы
   const updateTableTitle = (tableIndex, newTitle) => {
     const updatedTables = [...tables];
     updatedTables[tableIndex].title = newTitle;
     setTables(updatedTables);
   };
 
-  // Обновить заголовок столбца
   const updateColumnHeader = (tableIndex, columnIndex, newHeader) => {
     const updatedTables = [...tables];
     updatedTables[tableIndex].headers[columnIndex] = newHeader;
     setTables(updatedTables);
   };
 
-  // Удалить столбец
   const removeColumn = (tableIndex, columnIndex) => {
     const updatedTables = [...tables];
-    updatedTables[tableIndex].headers.splice(columnIndex, 1); // Удаляем заголовок
+    updatedTables[tableIndex].headers.splice(columnIndex, 1); 
     updatedTables[tableIndex].rows.forEach((row) => {
-      delete row[Object.keys(row)[columnIndex]]; // Удаляем соответствующие значения из строк
+      delete row[Object.keys(row)[columnIndex]];
     });
     setTables(updatedTables);
   };
 
-  // Добавить столбец
   const addColumn = (tableIndex) => {
     const newColumnName = `Column ${tables[tableIndex].headers.length + 1}`;
     const updatedTables = [...tables];
@@ -94,21 +88,18 @@ const AdminPage = () => {
     setTables(updatedTables);
   };
 
-  // Обновить данные ячейки
   const updateCell = (tableIndex, rowIndex, columnKey, newValue) => {
     const updatedTables = [...tables];
     updatedTables[tableIndex].rows[rowIndex][columnKey] = newValue;
     setTables(updatedTables);
   };
 
-  // Удалить строку
   const removeRow = (tableIndex, rowIndex) => {
     const updatedTables = [...tables];
     updatedTables[tableIndex].rows.splice(rowIndex, 1);
     setTables(updatedTables);
   };
 
-  // Добавить строку
   const addRow = (tableIndex) => {
     const newRow = {};
     tables[tableIndex].headers.forEach((header) => {
@@ -119,7 +110,6 @@ const AdminPage = () => {
     setTables(updatedTables);
   };
 
-   // Функция загрузки фонового изображения
    const handleBackgroundImageChange = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -127,14 +117,13 @@ const AdminPage = () => {
       reader.onload = () => {
         setStyles((prevStyles) => ({
           ...prevStyles,
-          backgroundImage: reader.result, // Устанавливаем изображение как base64 строку
+          backgroundImage: reader.result, 
         }));
       };
       reader.readAsDataURL(file);
     }
   };
 
-  // Сохранить данные на сервере
   const saveData = async () => {
     const dataToSave = { tables, styles };
     try {
@@ -162,9 +151,9 @@ const AdminPage = () => {
   };
 
   const toggleEditMode = () => {
-    setPreviousTables([...tables]); // Сохраняем текущее состояние перед редактированием
+    setPreviousTables([...tables]);
     setPreviousStyles({ ...styles });
-    setShowPopup(!showPopup); // Скрываем или показываем модальное окно
+    setShowPopup(!showPopup); 
   };
 
   return (
@@ -176,7 +165,6 @@ const AdminPage = () => {
         position: "relative",
       }}
     >
-      {/* Слой затемнения */}
       <div
         style={{
           position: "absolute",
@@ -185,8 +173,8 @@ const AdminPage = () => {
           width: "100%",
           height: "100%",
           backgroundColor: "rgba(0, 0, 0, 0.5)",
-          opacity: styles.overlayOpacity, // Уровень затемнения
-          zIndex: 0, // Слой поверх фона, но под контентом
+          opacity: styles.overlayOpacity, 
+          zIndex: 0, 
         }}
       ></div>
       <button className="editButton" onClick={toggleEditMode}>
@@ -204,13 +192,11 @@ const AdminPage = () => {
               onChange={(e) => setIsEditing(e.target.checked)}
             />
           </label>
-           {/* Изменение фонового изображения */}
            <label>
             Фоновое изображение:
             <input type="file" accept="image/*" onChange={handleBackgroundImageChange} />
           </label>
 
-          {/* Изменение уровня затемнения */}
           <label>
             Уровень затемнения:
             <input
@@ -393,7 +379,7 @@ const AdminPage = () => {
           bounds="parent"
           style={{
             border: "1px solid #000",
-            backgroundColor: `${styles.bgColor}99`, // Полупрозрачный фон
+            backgroundColor: `${styles.bgColor}99`,
             borderRadius: "20px",
             textAlign: "center",
           }}

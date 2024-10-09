@@ -1,7 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Rnd } from "react-rnd";
-
 import "../styles/styles.css";
+
+const loadDataFromServer = async () => {
+  const response = await fetch("/get-data");
+  const data = await response.json();
+  return data;
+}
 
 const AdminPage = () => {
   const [tables, setTables] = useState([]);
@@ -14,11 +19,25 @@ const AdminPage = () => {
     fontColorColumn: "#000000",
     fontColorContent: "#000000",
     isBold: false,
+    backgroundImage: "",
+    overlayOpacity: 0.5,
+
   });
   const [isEditing, setIsEditing] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [previousTables, setPreviousTables] = useState([]);
   const [previousStyles, setPreviousStyles] = useState({});
+
+  useEffect(() => {
+    const loadData = async () => {
+      const savedData = await loadDataFromServer();
+      if (savedData) {
+        setTables(savedData.tables);
+        setStyles(savedData.styles);
+      }
+    };
+    loadData();
+  }, []);
 
   // Добавить новую таблицу
   const addNewTable = () => {
@@ -100,6 +119,21 @@ const AdminPage = () => {
     setTables(updatedTables);
   };
 
+   // Функция загрузки фонового изображения
+   const handleBackgroundImageChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setStyles((prevStyles) => ({
+          ...prevStyles,
+          backgroundImage: reader.result, // Устанавливаем изображение как base64 строку
+        }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   // Сохранить данные на сервере
   const saveData = async () => {
     const dataToSave = { tables, styles };
@@ -134,7 +168,27 @@ const AdminPage = () => {
   };
 
   return (
-    <div className="main-screen">
+    <div
+      className="main-screen"
+      style={{
+        backgroundImage: `url(${styles.backgroundImage})`,
+        backgroundSize: "cover",
+        position: "relative",
+      }}
+    >
+      {/* Слой затемнения */}
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          backgroundColor: "rgba(0, 0, 0, 0.5)",
+          opacity: styles.overlayOpacity, // Уровень затемнения
+          zIndex: 0, // Слой поверх фона, но под контентом
+        }}
+      ></div>
       <button className="editButton" onClick={toggleEditMode}>
         {showPopup ? "Закрыть редактирование" : "Режим редактирования"}
       </button>
@@ -148,6 +202,26 @@ const AdminPage = () => {
               type="checkbox"
               checked={isEditing}
               onChange={(e) => setIsEditing(e.target.checked)}
+            />
+          </label>
+           {/* Изменение фонового изображения */}
+           <label>
+            Фоновое изображение:
+            <input type="file" accept="image/*" onChange={handleBackgroundImageChange} />
+          </label>
+
+          {/* Изменение уровня затемнения */}
+          <label>
+            Уровень затемнения:
+            <input
+              type="range"
+              min="0"
+              max="1"
+              step="0.1"
+              value={styles.overlayOpacity}
+              onChange={(e) =>
+                setStyles({ ...styles, overlayOpacity: e.target.value })
+              }
             />
           </label>
           <h2>Редактирование стиля</h2>

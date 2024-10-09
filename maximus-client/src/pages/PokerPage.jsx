@@ -26,7 +26,27 @@ const PokerPage = () => {
   }, []);
 
   return (
-    <div className="main-screen">
+    <div
+      className="main-screen"
+      style={{
+        backgroundImage: `url(${styles.backgroundImage})`, // Фоновое изображение
+        backgroundSize: "cover", // Покрывает весь экран
+        position: "relative",
+      }}
+    >
+      {/* Слой затемнения */}
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          backgroundColor: "rgba(0, 0, 0, 0.5)",
+          opacity: styles.overlayOpacity || 0.5, // Уровень затемнения
+          zIndex: 0, // Слой поверх фона, но под контентом
+        }}
+      ></div>
       {tables.map((table, tableIndex) => (
         <Rnd
           key={tableIndex}

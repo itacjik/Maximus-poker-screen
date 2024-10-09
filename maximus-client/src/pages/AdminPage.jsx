@@ -6,7 +6,7 @@ const loadDataFromServer = async () => {
   const response = await fetch("/get-data");
   const data = await response.json();
   return data;
-}
+};
 
 const AdminPage = () => {
   const [tables, setTables] = useState([]);
@@ -21,7 +21,6 @@ const AdminPage = () => {
     isBold: false,
     backgroundImage: "",
     overlayOpacity: 0.5,
-
   });
   const [isEditing, setIsEditing] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
@@ -43,9 +42,9 @@ const AdminPage = () => {
     setTables([
       ...tables,
       {
-        title: `Table ${tables.length + 1}`, 
-        headers: ["Limits", "Rake", "Cap", "Min Buy In"], 
-        rows: [{ limits: "1$/2$", rake: "5%", cap: "-", minBuyIn: "100$" }],// Изначальные строки
+        title: `Table ${tables.length + 1}`,
+        headers: ["Limits", "Rake", "Cap", "Min Buy In"],
+        rows: [{ limits: "1$/2$", rake: "5%", cap: "-", minBuyIn: "100$" }], // Изначальные строки
         position: { x: 150, y: 150 },
         size: { width: 400, height: 200 },
       },
@@ -71,7 +70,7 @@ const AdminPage = () => {
 
   const removeColumn = (tableIndex, columnIndex) => {
     const updatedTables = [...tables];
-    updatedTables[tableIndex].headers.splice(columnIndex, 1); 
+    updatedTables[tableIndex].headers.splice(columnIndex, 1);
     updatedTables[tableIndex].rows.forEach((row) => {
       delete row[Object.keys(row)[columnIndex]];
     });
@@ -110,14 +109,14 @@ const AdminPage = () => {
     setTables(updatedTables);
   };
 
-   const handleBackgroundImageChange = (event) => {
+  const handleBackgroundImageChange = (event) => {
     const file = event.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onload = () => {
         setStyles((prevStyles) => ({
           ...prevStyles,
-          backgroundImage: reader.result, 
+          backgroundImage: reader.result,
         }));
       };
       reader.readAsDataURL(file);
@@ -153,7 +152,7 @@ const AdminPage = () => {
   const toggleEditMode = () => {
     setPreviousTables([...tables]);
     setPreviousStyles({ ...styles });
-    setShowPopup(!showPopup); 
+    setShowPopup(!showPopup);
   };
 
   return (
@@ -173,8 +172,8 @@ const AdminPage = () => {
           width: "100%",
           height: "100%",
           backgroundColor: "rgba(0, 0, 0, 0.5)",
-          opacity: styles.overlayOpacity, 
-          zIndex: 0, 
+          opacity: styles.overlayOpacity,
+          zIndex: 0,
         }}
       ></div>
       <button className="editButton" onClick={toggleEditMode}>
@@ -192,9 +191,13 @@ const AdminPage = () => {
               onChange={(e) => setIsEditing(e.target.checked)}
             />
           </label>
-           <label>
+          <label>
             Фоновое изображение:
-            <input type="file" accept="image/*" onChange={handleBackgroundImageChange} />
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleBackgroundImageChange}
+            />
           </label>
 
           <label>

@@ -135,7 +135,7 @@ const AdminPage = () => {
 
   return (
     <div className="poker-screen">
-       <button className="editButton" onClick={toggleEditMode}>
+      <button className="editButton" onClick={toggleEditMode}>
         {showPopup ? "Закрыть редактирование" : "Режим редактирования"}
       </button>
 
@@ -335,7 +335,15 @@ const AdminPage = () => {
                 textShadow: `2px 2px 4px ${styles.shadowColorTitle}`,
               }}
             >
-              {table.title}
+              {isEditing ? (
+                <input
+                  type="text"
+                  value={table.title}
+                  onChange={(e) => updateTableTitle(tableIndex, e.target.value)}
+                />
+              ) : (
+                table.title
+              )}
             </h1>
 
             {isEditing ? (

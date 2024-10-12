@@ -4,11 +4,9 @@ const fs = require('fs');
 
 const app = express();
 
-
 // Увеличиваем лимиты для JSON данных и URL-кодированных данных
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
-
 
 // API для сохранения данных (стили, позиции и т.д.)
 app.post('/save-data', (req, res) => {

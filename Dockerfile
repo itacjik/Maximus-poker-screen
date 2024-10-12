@@ -17,6 +17,9 @@ WORKDIR /app/maximus-client
 RUN npm install
 RUN npm run build
 
+# Переходим в корневую директорию
+WORKDIR /app
+
 # Экспонируем порт 3001 для доступа к приложению
 EXPOSE 3001
 

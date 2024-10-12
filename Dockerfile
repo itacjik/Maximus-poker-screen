@@ -12,8 +12,13 @@ COPY . .
 # Устанавливаем зависимости
 RUN npm install
 
-# Экспонируем порт 80 для доступа к приложению
+# Переходим в директорию maximus-client и устанавливаем зависимости
+WORKDIR /app/maximus-client
+RUN npm install
+RUN npm run build
+
+# Экспонируем порт 3001 для доступа к приложению
 EXPOSE 3001
 
-# Запускаем nginxtou
+# Запускаем сервер
 CMD ["node", "server.js"]

@@ -1,18 +1,14 @@
 const express = require('express');
-const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
 const app = express();
-const upload = multer({ dest: 'uploads/' });
 
 app.use(express.json()); // Для обработки JSON данных
 
-// API для загрузки изображений
-app.post('/upload', upload.single('image'), (req, res) => {
-  if (!req.file) return res.status(400).send('Нет файла');
-  res.send(`Файл загружен: ${req.file.filename}`);
-});
+// Увеличиваем лимиты для JSON данных и URL-кодированных данных
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 // API для сохранения данных (стили, позиции и т.д.)
 app.post('/save-data', (req, res) => {
@@ -30,9 +26,6 @@ app.get('/get-data', (req, res) => {
     res.json(null); // Если данных нет, возвращаем null
   }
 });
-
-// Раздача статических файлов (загруженные изображения)
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Раздача административной панели (React)
 app.use('/admin', express.static(path.join(__dirname, 'maximus-client/build')));
